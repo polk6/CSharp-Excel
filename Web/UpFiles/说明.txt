@@ -1,0 +1,4 @@
+介绍各文件夹的作用
+AttFiles ：存放上传的附件，不可删
+ExcelFiles ：存放Excel导入、导出操作的暂存文件，可删除
+TemplateFiles ：存放Exce导入的模板下载，不可删

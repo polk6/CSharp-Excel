@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Excel导入、导出</title>
+    <script src="Scripts/jquery-1.7.2.js" type="text/javascript"></script>
+    <script src="Scripts/jquery.form.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        // 导入Excel
+        function importExcel() {
+            $('#file-form').ajaxSubmit({
+                type: 'POST', // HTTP请求方式
+                url: 'ashx/ImportExcel.ashx', // 请求的URL地址
+                dataType: 'json', // 服务器返回数据转换成的类型
+                success: function (data, responseStatus) {
+                    var msg = '';
+                    if (data.success) {
+                        msg = '转换成功!\r\n';
+                    } else {
+                        msg = '转换失败!\r\n';
+                    }
+                    msg += data.msg + '\r\n'; // 获取异常信息
+                    for (var i = 0, len = data.data.length; i < len; i++) { // 获取转换后的实体对象
+                        msg += '数据：' + JSON.stringify(data.data[i]) + '\r\n';
+                    }
+                    $('#msg').val(msg);
+                }
+            });
+        }
+
+        // 导出Excel
+        function exportExcel() {
+            $('#file-form').ajaxSubmit({
+                type: 'POST', // HTTP请求方式
+                url: 'ashx/ExportExcel.ashx', // 请求的URL地址
+                dataType: 'json', // 服务器返回数据转换成的类型
+                success: function (data, responseStatus) {
+                    location.href = location.origin + '/' + data;
+                }
+            });
+        }
+
+    </script>
+</head>
+<body>
+    <h3>一、Excel导入</h3>
+    <h5>
+        1.模板下载：
+        <a href="UpFiles/TemplateFiles/学生成绩导入模板_2003版.xls">学生成绩导入模板_2003版</a>
+        <a href="UpFiles/TemplateFiles/学生成绩导入模板_2007版.xlsx">学生成绩导入模板_2007版</a>
+    </h5>
+    <h5>2.选择Excel文件并上传</h5>
+
+    <form enctype="multipart/form-data" id="file-form">
+        2.1<input type="file" name="filed" /><br />
+    </form>
+    2.2<input type="button" onclick="importExcel()" value="提交" name="submit" /><br />
+<textarea readonly="readonly" rows="10" cols="80" id="msg"></textarea>
+
+    <h3>二、Excel导出</h3>
+    1.<input type="button" onclick="exportExcel()" value="导出Excel" /><br />
+    <h5>模拟数据：</h5>
+<pre>
+    姓名	年龄	性别	语文成绩    数学成绩
+    刘一	22       男        80          90
+    陈二	23       男        81          91
+    张三	24       男        82          92
+    李四	25       男        83          93
+    王五	26       男        84          94
+
+</pre>
+</body>
+</html>
